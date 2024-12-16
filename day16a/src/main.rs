@@ -1,5 +1,6 @@
 use enum_map::{Enum, EnumMap};
 use std::cmp::min;
+use std::cmp::Reverse;
 use std::collections::binary_heap::BinaryHeap;
 use std::io;
 use std::ops::{Index, IndexMut};
@@ -75,13 +76,13 @@ fn find_path(grid: &Grid<u8>, start: Pos) -> Option<u32> {
             .collect(),
     );
 
-    let mut queue: BinaryHeap<(u32, Pos, Dir)> = BinaryHeap::new();
+    let mut queue: BinaryHeap<Reverse<(u32, Pos, Dir)>> = BinaryHeap::new();
     dist[start][Dir::East] = 0;
-    queue.push((0, start, Dir::East));
+    queue.push(Reverse((0, start, Dir::East)));
 
     let mut end_cost = std::u32::MAX;
 
-    while let Some((cost, pos, dir)) = queue.pop() {
+    while let Some(Reverse((cost, pos, dir))) = queue.pop() {
         if grid[pos] == b'E' {
             end_cost = min(end_cost, cost);
             continue;
@@ -96,7 +97,7 @@ fn find_path(grid: &Grid<u8>, start: Pos) -> Option<u32> {
             let next_cost = cost + edge_cost;
             if grid[next_pos] != b'#' && next_cost < dist[next_pos][next_dir] {
                 dist[next_pos][next_dir] = next_cost;
-                queue.push((next_cost, next_pos, next_dir));
+                queue.push(Reverse((next_cost, next_pos, next_dir)));
             }
         }
     }

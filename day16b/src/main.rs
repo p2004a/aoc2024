@@ -1,5 +1,6 @@
 use enum_map::{Enum, EnumMap};
 use std::cmp::min;
+use std::cmp::Reverse;
 use std::collections::binary_heap::BinaryHeap;
 use std::collections::{HashSet, VecDeque};
 use std::io;
@@ -83,11 +84,11 @@ fn good_seats(grid: &Grid<u8>, start: Pos) -> usize {
 
     let mut queue = BinaryHeap::new();
     dist[start][Dir::East] = 0;
-    queue.push((0, start, Dir::East));
+    queue.push(Reverse((0, start, Dir::East)));
 
     let mut end_cost = std::u32::MAX;
     let mut end_pos = start;
-    while let Some((cost, pos, dir)) = queue.pop() {
+    while let Some(Reverse((cost, pos, dir))) = queue.pop() {
         if grid[pos] == b'E' {
             end_pos = pos;
             end_cost = min(end_cost, cost);
@@ -104,7 +105,7 @@ fn good_seats(grid: &Grid<u8>, start: Pos) -> usize {
             if grid[next_pos] != b'#' {
                 if next_cost < dist[next_pos][next_dir] {
                     dist[next_pos][next_dir] = next_cost;
-                    queue.push((next_cost, next_pos, next_dir));
+                    queue.push(Reverse((next_cost, next_pos, next_dir)));
                     prev[next_pos][next_dir].clear();
                 }
                 if next_cost <= dist[next_pos][next_dir] {
