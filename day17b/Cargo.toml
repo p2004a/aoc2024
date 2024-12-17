@@ -1,0 +1,9 @@
+[package]
+name = "aoc2024day17b"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+enum-map = "2.7.3"
+itertools = "0.13.0"
+regex = "1.11.1"
